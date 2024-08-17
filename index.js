@@ -44,6 +44,23 @@ async function run() {
       
       // search query
       newQuery.name = { $regex: new RegExp(query.search, 'i') }
+      // sort      
+      switch (query.sort) {
+        case 'date':
+          queryOptions.sort = { created_at: 1 }
+          break;
+        case 'price-asc':
+          queryOptions.sort = { price: 1 }
+          break;
+        case 'price-desc':
+          queryOptions.sort = { price: -1 }
+          break;
+      
+        default:
+          queryOptions.sort = {}
+          break;
+      }
+
       
       // get products data; count products
       const productsData = await collProducts.find(newQuery, queryOptions).toArray()
