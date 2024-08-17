@@ -64,6 +64,11 @@ async function run() {
       if (query.category) {
         newQuery.category = query.category
       }
+      // filter - multiple brand
+      if (query.brands) {
+        // brands -> "apple samsung" 
+        newQuery.brand = { $in: query.brands.split(' ') }
+      }
 
       
       // get products data; count products
