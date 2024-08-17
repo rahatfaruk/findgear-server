@@ -29,15 +29,27 @@ async function run() {
     // ### routes
     app.get('/', (req, res) => {res.send('welcome!')})
 
+    // get: all products with query
     app.get('/products', async (req, res) => {
       const query = req.query
-      let newQuery = {};
+      let newQuery = {}     
+      const currPage = +query.currPage
+      const limit = +query.limit || 10
+      const skip = (currPage - 1) * limit
+
+      const queryOptions = {
+        skip,
+        limit
+      }
       
       // search query
       newQuery.name = { $regex: new RegExp(query.search, 'i') }
       
-      const productsData = await collProducts.find(newQuery).toArray()
-      return res.send(productsData)
+      // get products data; count products
+      const productsData = await collProducts.find(newQuery, queryOptions).toArray()
+      const totalProducts = await collProducts.countDocuments(newQuery)
+      
+      return res.send({products: productsData, total: totalProducts})
     })
 
 
