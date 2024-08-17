@@ -60,6 +60,10 @@ async function run() {
           queryOptions.sort = {}
           break;
       }
+      // filter - category
+      if (query.category) {
+        newQuery.category = query.category
+      }
 
       
       // get products data; count products
