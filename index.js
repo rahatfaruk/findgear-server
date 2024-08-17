@@ -29,6 +29,16 @@ async function run() {
     // ### routes
     app.get('/', (req, res) => {res.send('welcome!')})
 
+    app.get('/products', async (req, res) => {
+      const query = req.query
+      let newQuery = {};
+      
+      // search query
+      newQuery.name = { $regex: new RegExp(query.search, 'i') }
+      
+      const productsData = await collProducts.find(newQuery).toArray()
+      return res.send(productsData)
+    })
 
 
     // ### Send a ping
