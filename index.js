@@ -16,13 +16,15 @@ const client = new MongoClient(uri, {
 });
 
 // ## middleware
-app.use(cors())
+app.use(cors({
+  origin: ["http://localhost:5173", "https://rf-findgear.vercel.app"]
+}))
 
 
 async function run() {
   try {
     // Connect the client to the server
-    await client.connect();
+    // await client.connect();
     const database = client.db('findgear')
     const collProducts = database.collection('products')
     
@@ -73,7 +75,6 @@ async function run() {
       if (+query.priceMax) {
         newQuery.price = { $gte: +query.priceMin, $lte: +query.priceMax }
       }
-
       
       // get products data; count products
       const productsData = await collProducts.find(newQuery, queryOptions).toArray()
@@ -84,8 +85,8 @@ async function run() {
 
 
     // ### Send a ping
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged deployment!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged deployment!");
   } catch (err) {
     console.log(err.message);
   }
