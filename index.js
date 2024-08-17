@@ -69,6 +69,10 @@ async function run() {
         // brands -> "apple samsung" 
         newQuery.brand = { $in: query.brands.split(' ') }
       }
+      // filter - price range
+      if (+query.priceMax) {
+        newQuery.price = { $gte: +query.priceMin, $lte: +query.priceMax }
+      }
 
       
       // get products data; count products
